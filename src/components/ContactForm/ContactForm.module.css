@@ -1,0 +1,47 @@
+.form {
+display: flex;
+flex-direction: column;
+row-gap: 8px;
+}
+
+.fieldWrapper{
+display: flex;
+flex-direction: column;
+}
+
+.field {
+    background-color: aliceblue;
+    border: 1px solid black;
+    border-radius:2px;
+    padding:2px 8px;
+    color:black;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+}
+
+.btn {
+      border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: rgb(219, 218, 218);
+  cursor: pointer;
+  transition: border-color 0.25s;
+   color: inherit;
+   width: 100px;
+   height: 40px;
+
+}
+.message {
+  font-size: 10px;
+  /* margin-top: 5px; */
+}
+.error {
+  color: red;
+}
+
+.required {
+  color: green;
+}

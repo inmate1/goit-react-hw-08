@@ -1,0 +1,27 @@
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  padding: 8px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.text {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btnContact {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
