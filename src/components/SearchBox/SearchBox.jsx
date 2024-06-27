@@ -1,7 +1,9 @@
 import css from './SearchBox.module.css';
 import { useId } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectNameFilter, setNameFilter } from '../../redux/filtersSlice';
+import { selectNameFilter } from '../../redux/filters/selectors';
+import { setNameFilter } from '../../redux/filters/slice';
+
 
 const SearchBox = () => {
   const inputId = useId();

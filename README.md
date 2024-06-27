@@ -11,6 +11,8 @@ Currently, two official plugins are available:
 npm i yup
 npm i react-icons
 npm install formik --save
+npm install react-router-dom
+
 Для разработки проекта на React, вам потребуется установить несколько основных пакетов. Вот основные из них:
 
 React и ReactDOM:
