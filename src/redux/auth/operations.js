@@ -1,48 +1,22 @@
-// Операції слайсу auth
-
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { apiUrl } from '../contacts/operations';
 
-// Додайте у файл redux/auth/operations.js операції, оголошені за допомогою createAsyncThunk, для роботи з користувачем:
-
-// register - для реєстрації нового користувача. Базовий тип екшену "auth/register". Використовується у компоненті RegistrationForm на сторінці реєстрації.
-// login - для логіну існуючого користувача. Базовий тип екшену "auth/login". Використовується у компоненті LoginForm на сторінці логіну.
-// logout - для виходу з додатка. Базовий тип екшену "auth/logout". Використовується у компоненті UserMenu у шапці додатку.
-// refreshUser - оновлення користувача за токеном. Базовий тип екшену "auth/refresh". Використовується у компоненті App під час його монтування.
-// Токен авторизованого користувача потрібно зберігати в локальному сховищі за допомогою бібліотеки persist.
 axios.defaults.baseURL = apiUrl;
-
-// Utility to add JWT Утилиты для работы с JWT
-// setAuthHeader добавляет JWT в заголовок Authorization для всех будущих запросов.
 
 const setAuthHeader = token => {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
-// Utility to remove JWT
-// clearAuthHeader удаляет JWT из заголовка Authorization.
 const clearAuthHeader = () => {
   axios.defaults.headers.common.Authorization = '';
 };
-/*
- * POST @ /users/signup Создание асинхронного действия для регистрации пользователя
- * body: { name, email, password }
- */
-// register - асинхронное действие для регистрации пользователя.
-// 'auth/register' - строка, идентифицирующая действие.
-// Асинхронная функция принимает credentials (объект с именем, email и паролем) и thunkAPI.
-// Выполняется POST-запрос к /users/signup с credentials(реквизиты для входа).
-// Если запрос успешен, добавляем токен в заголовок Authorization с помощью setAuthHeader и возвращаем данные ответа.
-// Если запрос не удался, возвращаем ошибку с помощью thunkAPI.rejectWithValue.
+
 export const register = createAsyncThunk(
   'auth/register',
   async (newUser, thunkAPI) => {
     try {
-      const response = await axios.post(
-        '/users/signup',
-        newUser
-      );
+      const response = await axios.post('/users/signup', newUser);
       console.log(response);
 
       setAuthHeader(response.data.token);
@@ -98,7 +72,31 @@ export const refreshUser = createAsyncThunk(
       const response = await axios.get('/users/current');
       return response.data;
     } catch (error) {
+      clearAuthHeader();
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+// export const currentOperation = createAsyncThunk(
+//   'auth/current',
+//   async (_, { rejectWithValue, getState }) => {
+//     try {
+//       const { auth } = getStateQ;
+//       setHeaderToken(auth.token);
+//       const { data } = await axios.get('users/current');
+//       setHeaderToken(data.token);
+//       return data;
+//     } catch (error) {
+//       clearHeaderTokenQ;
+//       return rejectWithValue(error.message);
+//     }
+//   },
+//   {
+//     condition: (_, { getState }) => {
+//       const { auth } = getStateQ;
+//       if (!auth.token) {
+//         return false;
+//       }
+//     },
+//   }
+// );

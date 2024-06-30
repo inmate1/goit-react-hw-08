@@ -12,7 +12,7 @@ npm i yup
 npm i react-icons
 npm install formik --save
 npm install react-router-dom
-
+npm install react-loader-spinner
 Для разработки проекта на React, вам потребуется установить несколько основных пакетов. Вот основные из них:
 
 React и ReactDOM:
@@ -51,29 +51,22 @@ classnames (упрощает работу с классами CSS)
 Пример установки базовых пакетов
 Для начала вам потребуется Node.js и npm (или yarn). После установки Node.js можно создать новый проект с помощью Create React App:
 
-bash
-Копировать код
+
 npx create-react-app my-app
 cd my-app
 Далее можно установить дополнительные пакеты по мере необходимости. Например, для установки React Router:
 
-bash
-Копировать код
+
 npm install react-router-dom
 Для установки Axios:
 
-bash
-Копировать код
+
 npm install axios
 Для установки Styled-components:
 
-bash
-Копировать код
 npm install styled-components
 Для установки Redux и инструментов:
 
-bash
-Копировать код
 npm install redux react-redux @reduxjs/toolkit
 Это базовый набор пакетов для создания проекта на React. В зависимости от специфики вашего проекта, может потребоваться установка дополнительных библиотек и инструментов.
 
@@ -100,9 +93,8 @@ const axiosInstance = axios.create({
   baseURL: 'http://example.com/api', // Убедитесь, что указали правильный базовый URL
   headers: { 'Content-Type': 'application/json' },
 });
-Обновленный Thunk
-javascript
-Копировать код
+
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from './axiosInstance'; // Предположим, что файл с экземпляром axios называется axiosInstance.js
 
@@ -119,10 +111,7 @@ export const fetchContacts = createAsyncThunk(
   }
 );
 Использование Thunk в Reducer
-Убедитесь, что вы правильно используете созданный thunk в вашем contactsSlice.js:
 
-javascript
-Копировать код
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchContacts } from './contactsOps';
 
@@ -160,6 +149,40 @@ export const selectError = state => state.contacts.error;
 export default contactsSlice.reducer;
 Заключение
 С помощью этих улучшений ваш код станет более читаемым и устойчивым к ошибкам. Использование экземпляра Axios с предустановленными настройками улучшает поддержку и упрощает настройку заголовков и базового URL. Обработка ошибок, возвращающая более подробную информацию, поможет вам лучше диагностировать и обрабатывать различные типы ошибок.
+
+///////////////////////////////////////////
+PrivateRoute
+
+import { useSelector } from 'react-redux';
+import { selectIsLoggedIn } from '../redux/auth/selectors';
+import { Navigate } from 'react-router-dom';
+
+export default function PrivateRoute({ component, redirectTo }) {
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
+  return isLoggedIn ? component : <Navigate to={redirectTo} />;
+}
+Объяснение:
+Импорт зависимостей:
+
+useSelector из react-redux для доступа к состоянию Redux.
+selectIsLoggedIn из ../redux/auth/selectors для получения информации о том, авторизован ли пользователь.
+Navigate из react-router-dom для перенаправления.
+Функция PrivateRoute:
+
+Использует useSelector, чтобы получить состояние isLoggedIn (авторизован ли пользователь).
+Если пользователь авторизован (isLoggedIn), возвращает переданный component.
+Если не авторизован, возвращает компонент Navigate, который перенаправляет на redirectTo.
+Маршруты:
+
+Главная страница ("/") отображает HomePage.
+Страница регистрации ("/register") использует RestrictedRoute, которая перенаправляет авторизованных пользователей на главную страницу ("/").
+Страница входа ("/login") использует RestrictedRoute, которая перенаправляет авторизованных пользователей на страницу контактов ("/contacts").
+Страница контактов ("/contacts") использует PrivateRoute, которая перенаправляет неавторизованных пользователей на страницу входа ("/login").
+Итог
+Этот код создает приложение с маршрутизацией, управляемой состоянием авторизации пользователя. PrivateRoute и RestrictedRoute защищают доступ к определенным маршрутам в зависимости от того, авторизован ли пользователь. Компоненты загружаются лениво, а состояние пользователя обновляется при загрузке приложения.
+
+
 
 
 

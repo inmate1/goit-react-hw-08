@@ -3,7 +3,6 @@ import { fetchContacts, addContact, deleteContact } from './operations';
 import { selectNameFilter } from '../filters/selectors';
 import { selectContacts } from './selectors';
 
-
 const initialState = {
   items: [],
   loading: false,
@@ -54,13 +53,13 @@ const changeContacts = createSlice({
   },
 });
 
-
-
 export const selectFilteredContacts = createSelector(
   [selectContacts, selectNameFilter],
   (contacts, findContacts) => {
-    return contacts?.filter(contact =>
-      contact.name.toLowerCase().includes(findContacts.toLowerCase())
+    return contacts?.filter(
+      contact =>
+        contact.name.toLowerCase().includes(findContacts.toLowerCase()) ||
+        contact.number.includes(findContacts)
     );
   }
 );

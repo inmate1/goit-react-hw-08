@@ -1,7 +1,25 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { useId } from 'react';
+import css from './RegistrationForm.module.css';
+import * as Yup from 'yup';
 
-
+const FeedbackSchema = Yup.object().shape({
+  name: Yup.string()
+    .trim()
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Name is required'),
+  email: Yup.string()
+    .trim()
+    .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 'Invalid email format')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Please confirm your password'),
+});
 
 const RegistrationForm = ({ submit }) => {
   const nameId = useId();
@@ -18,7 +36,7 @@ const RegistrationForm = ({ submit }) => {
 
   return (
     <div>
-      <h1>Anywhere in your app!</h1>
+      <h2 className={css.title}>Register in your app</h2>
       <Formik
         initialValues={{
           name: '',
@@ -26,70 +44,96 @@ const RegistrationForm = ({ submit }) => {
           password: '',
           confirmPassword: '',
         }}
-        validate={values => {
-          const errors = {};
-          if (!values.email) {
-            errors.email = 'Required';
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          ) {
-            errors.email = 'Invalid email address';
-          }
-
-          if (!values.password) {
-            errors.password = 'Required';
-          } else if (values.password.length < 6) {
-            errors.password = 'Password must be at least 6 characters';
-          }
-
-          if (!values.confirmPassword) {
-            errors.confirmPassword = 'Required';
-          } else if (values.password !== values.confirmPassword) {
-            errors.confirmPassword = 'Passwords do not match';
-          }
-
-          return errors;
-        }}
+        validationSchema={FeedbackSchema}
         onSubmit={handleSubmit}>
-        {({ isSubmitting }) => (
-          <Form>
-            <div>
+        {({ isSubmitting, errors, touched }) => (
+          <Form className={css.form}>
+            <div className={css.fieldWrapper}>
               <label htmlFor={nameId}>Name:</label>
-              <Field type='text' name='name' id={nameId} autoComplete='name' />
-              <ErrorMessage name='name' component='div' />
+              <Field
+                className={css.field}
+                type='text'
+                name='name'
+                id={nameId}
+                autoComplete='name'
+              />
+              {touched.name && errors.name ? (
+                <div className={`${css.message} ${css.error}`}>
+                  {errors.name}
+                </div>
+              ) : (
+                touched.name && (
+                  <div className={`${css.message} ${css.required}`}>
+                    Required
+                  </div>
+                )
+              )}
             </div>
-            <div>
+            <div className={css.fieldWrapper}>
               <label htmlFor={emailId}>Email:</label>
               <Field
+                className={css.field}
                 type='email'
                 name='email'
                 id={emailId}
                 autoComplete='email'
               />
-              <ErrorMessage name='email' component='div' />
+              {touched.email && errors.email ? (
+                <div className={`${css.message} ${css.error}`}>
+                  {errors.email}
+                </div>
+              ) : (
+                touched.email && (
+                  <div className={`${css.message} ${css.required}`}>
+                    Required
+                  </div>
+                )
+              )}
             </div>
-            <div>
+            <div className={css.fieldWrapper}>
               <label htmlFor={passwordId}>Password:</label>
               <Field
+                className={css.field}
                 type='password'
                 name='password'
                 id={passwordId}
                 autoComplete='new-password'
               />
-              <ErrorMessage name='password' component='div' />
+              {touched.password && errors.password ? (
+                <div className={`${css.message} ${css.error}`}>
+                  {errors.password}
+                </div>
+              ) : (
+                touched.password && (
+                  <div className={`${css.message} ${css.required}`}>
+                    Required
+                  </div>
+                )
+              )}
             </div>
-            <div>
+            <div className={css.fieldWrapper}>
               <label htmlFor={confirmPasswordId}>Confirm Password:</label>
               <Field
+                className={css.field}
                 type='password'
                 name='confirmPassword'
                 id={confirmPasswordId}
                 autoComplete='new-password'
               />
-              <ErrorMessage name='confirmPassword' component='div' />
+              {touched.confirmPassword && errors.confirmPassword ? (
+                <div className={`${css.message} ${css.error}`}>
+                  {errors.confirmPassword}
+                </div>
+              ) : (
+                touched.confirmPassword && (
+                  <div className={`${css.message} ${css.required}`}>
+                    Required
+                  </div>
+                )
+              )}
             </div>
-            <button type='submit' disabled={isSubmitting}>
-              Submit
+            <button className={css.btn} type='submit' disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </button>
           </Form>
         )}
