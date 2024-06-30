@@ -155,3 +155,105 @@ axios используется для выполнения HTTP-запросов
 Все операции, связанные с установкой и удалением заголовков авторизации, сосредоточены в одном месте, что упрощает их обновление и тестирование.
 Применение в реальном мире
 Такой паттерн широко используется в современных веб-приложениях, особенно тех, которые работают с RESTful API и требуют безопасной и простой аутентификации. Он позволяет легко управлять состоянием аутентификации и обеспечивает гибкость при интеграции с различными системами аутентификации.
+
+Проверка токена: Перед выполнением запроса проверяется, существует ли токен в состоянии auth. Если токен отсутствует, действие не будет выполняться.
+Заголовок авторизации: Перед запросом устанавливается заголовок авторизации с текущим токеном пользователя. После успешного запроса обновляется токен.
+Очистка заголовка: В случае ошибки заголовок авторизации очищается.
+Оптимизированный код:
+
+javascript
+Копировать код
+import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { setAuthHeader, clearAuthHeader } from './authHeader';
+
+export const refreshUser = createAsyncThunk(
+  'auth/current',
+  async (_, { rejectWithValue, getState }) => {
+    const { auth } = getState();
+
+    if (!auth.token) {
+      // Если токен отсутствует, отклоняем выполнение действия
+      return rejectWithValue('No token found');
+    }
+
+    try {
+      setAuthHeader(auth.token); // Устанавливаем заголовок авторизации
+      const { data } = await axios.get('users/current');
+        if (data.token) {
+              // Если сервер не возвращает новый токен, оставляем старый
+              console.log('New token received:', data.token);
+              setAuthHeader(data.token); // Обновляем токен в заголовке, если необходимо
+            }
+            // else {
+            //   console.warn('No new token received, keeping the old one');
+            // }
+     
+      return data;
+    } catch (error) {
+      clearAuthHeader(); // Очищаем заголовок авторизации при ошибке
+      return rejectWithValue(error.message);
+    }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { auth } = getState();
+      return !!auth.token; // Если токен отсутствует, возвращаем false
+    },
+  }
+);
+Оптимизации:
+Упрощение проверки токена: Переместил проверку наличия токена внутрь основной функции, чтобы условие не дублировалось.
+Использование логического оператора: Упрощено условие в condition для проверки токена.
+Комментирование: Добавлены комментарии для пояснения каждого этапа.
+Таким образом, код становится более читаемым и поддерживаемым.
+
+Хороший вопрос! Действительно, проверка наличия токена дважды не является необходимой. Давайте упростим код, убрав избыточную проверку.
+
+Оптимизированный код без дублирующей проверки:
+
+javascript
+Копировать код
+import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { setAuthHeader, clearAuthHeader } from './authHeader';
+
+export const refreshUser = createAsyncThunk(
+  'auth/current',
+  async (_, { rejectWithValue, getState }) => {
+    const { auth } = getState();
+
+    if (!auth.token) {
+      // Если токен отсутствует, отклоняем выполнение действия
+      return rejectWithValue('No token found');
+    }
+
+    try {
+      setAuthHeader(auth.token); // Устанавливаем заголовок авторизации
+      const { data } = await axios.get('users/current');
+        if (data.token) {
+              // Если сервер не возвращает новый токен, оставляем старый
+              console.log('New token received:', data.token);
+              setAuthHeader(data.token); // Обновляем токен в заголовке, если необходимо
+            }
+            // else {
+            //   console.warn('No new token received, keeping the old one');
+            // }
+     
+      return data;
+    } catch (error) {
+      clearAuthHeader(); // Очищаем заголовок авторизации при ошибке
+      return rejectWithValue(error.message);
+    }
+  }
+);
+Объяснение:
+Убрана проверка в condition: Теперь условие проверки токена вынесено только в основную функцию async, и мы убрали дублирующую проверку из параметров condition.
+Проверка токена в начале async функции: Мы проверяем наличие токена перед выполнением HTTP-запроса и отклоняем действие, если токен отсутствует.
+Таким образом, код стал более простым и читаемым, без дублирующих проверок.
+
+
+
+
+
+

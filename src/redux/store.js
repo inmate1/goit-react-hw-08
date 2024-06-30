@@ -1,7 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-
-
 import {
   persistStore,
   persistReducer,
@@ -15,9 +13,7 @@ import {
 import { contactsReducer } from './contacts/slice';
 import { changeFilterReducer } from './filters/slice';
 import { authReducer } from './auth/slice';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-
-
+import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
   key: 'root',
@@ -26,8 +22,6 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
-
-
 
 const store = configureStore({
   reducer: {

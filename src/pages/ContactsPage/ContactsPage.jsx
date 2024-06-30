@@ -8,9 +8,7 @@ import { useEffect } from 'react';
 import { fetchContacts } from '../../redux/contacts/operations';
 import { selectIsLoggedIn } from '../../redux/auth/selectors';
 import Spinner from '../../components/Spinner/Spinner';
-import toast, { Toaster } from 'react-hot-toast';
 
-const notify = () => toast('Here is your toast.');
 
 const ContactsPage = () => {
   const contacts = useSelector(selectFilteredContacts);

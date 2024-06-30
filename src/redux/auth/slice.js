@@ -11,14 +11,6 @@ const initialState = {
   isRefreshing: false,
 };
 
-// Добавьте в файл redux/auth/operations.js операции, объявленные с помощью createAsyncThunk, для работы с пользователем:
-
-// register– для регистрации нового пользователя. Базовый тип экшена "auth/register". Используется в компоненте RegistrationFormна странице регистрации.
-// login– для логина существующего пользователя. Базовый тип экшена "auth/login". Используется в компоненте LoginFormна странице логина.
-// logout– для выхода из приложения. Базовый тип экшена "auth/logout". Используется в компоненте UserMenuв приложенной шапке.
-// refreshUser- обновление пользователя по токену. Базовый тип экшена "auth/refresh". Используется в компоненте App при его монтаже.
-
-// Токен авторизованного пользователя нужно хранить в локальном хранилище с помощью библиотеки persist .
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -56,6 +48,7 @@ const authSlice = createSlice({
       })
       .addCase(refreshUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.token = action.payload.token;
         state.isLoggedIn = true;
         state.isRefreshing = false;
       })
