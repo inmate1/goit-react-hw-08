@@ -2,6 +2,8 @@ import { Field, Form, Formik } from 'formik';
 import { useId } from 'react';
 import css from './RegistrationForm.module.css';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { register } from '../../redux/auth/operations';
 
 const FeedbackSchema = Yup.object().shape({
   name: Yup.string()
@@ -21,15 +23,16 @@ const FeedbackSchema = Yup.object().shape({
     .required('Please confirm your password'),
 });
 
-const RegistrationForm = ({ submit }) => {
+const RegistrationForm = () => {
   const nameId = useId();
   const emailId = useId();
   const passwordId = useId();
   const confirmPasswordId = useId();
+  const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
     const { name, email, password } = values;
-    submit({ name, email, password });
+    dispatch(register({ name, email, password }));
     actions.setSubmitting(false);
     actions.resetForm();
   };

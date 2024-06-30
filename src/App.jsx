@@ -35,9 +35,16 @@ function App() {
             <Route path='/register' element={<RegistrationPage />} />
             <Route path='/login' element={<LoginPage />} />
           </Route>
-          <Route element={<PrivateRoute />}>
-            <Route path='/contacts' element={<ContactsPage />} />
-          </Route>
+          <Route
+            path='contacts'
+            element={
+              <PrivateRoute
+                component={<ContactsPage />}
+                redirectTo={'/login'}
+              />
+            }
+          />
+
           <Route path='*' element={<Navigate to='/' />} />
         </Route>
       </Routes>

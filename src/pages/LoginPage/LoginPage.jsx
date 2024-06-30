@@ -4,15 +4,10 @@ import { logIn } from "../../redux/auth/operations";
 
 const LoginPage = () => {
 
-  const dispatch = useDispatch();
-
-  const handleSubmitForm = (values) => { 
-    dispatch(logIn(values));
-  }
-  
+ 
   return (
     <>
-      <LoginForm submit={handleSubmitForm} />
+      <LoginForm  />
     </>
   );
 }

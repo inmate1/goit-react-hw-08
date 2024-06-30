@@ -1,12 +1,16 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useId } from 'react';
 import css from './LoginForm.module.css';
-const LoginForm = ({ submit }) => {
+import { useDispatch } from 'react-redux';
+import { logIn } from '../../redux/auth/operations';
+
+const LoginForm = () => {
   const emailId = useId();
   const passwordId = useId();
+  const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
-    submit(values);
+    dispatch(logIn(values));
     actions.setSubmitting(false);
     actions.resetForm();
   };
