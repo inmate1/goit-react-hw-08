@@ -45,7 +45,6 @@ export const deleteContact = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      console.log(error.message);
       const errorMessage = error.response?.data?.message || error.message;
       return thunkAPI.rejectWithValue(errorMessage);
      

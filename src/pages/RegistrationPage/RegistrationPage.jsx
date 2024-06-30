@@ -5,7 +5,6 @@ import { register } from "../../redux/auth/operations";
 const RegistrationPage = () => {
     const dispatch = useDispatch();
     const handleSubmitForm = (values) => {
-       console.log(values);
        
         dispatch(register(values));
     }
