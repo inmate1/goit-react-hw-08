@@ -10,12 +10,9 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import EditContactModal from '../EditContactModal/EditContactModal';
 
-
-
-
 const Contact = ({ id, name, number }) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Состояние для модального окна редактирования
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Состояние для модального окна удаления
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -25,18 +22,16 @@ const Contact = ({ id, name, number }) => {
       .then(() => toast.success('Contact deleted successfully!'))
       .catch(() => toast.error('Failed to delete contact.'));
   };
-  const openEditModal = () => setIsEditModalOpen(true); 
-  const closeEditModal = () => setIsEditModalOpen(false); 
+  const openEditModal = () => setIsEditModalOpen(true);
+  const closeEditModal = () => setIsEditModalOpen(false);
 
-  const openDeleteModal = () => setIsDeleteModalOpen(true); 
-  const closeDeleteModal = () => setIsDeleteModalOpen(false); // Функция для закрытия модального окна удаления
+  const openDeleteModal = () => setIsDeleteModalOpen(true);
+  const closeDeleteModal = () => setIsDeleteModalOpen(false);
 
- 
   const confirmDelete = () => {
     handleDeleteContact(id);
     closeDeleteModal();
   };
-
 
   return (
     <li className={css.listItem} id={id}>
@@ -76,12 +71,13 @@ const Contact = ({ id, name, number }) => {
           </span>
         </button>
       </div>
-    {  isDeleteModalOpen &&
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onClose={closeDeleteModal}
-        onConfirm={confirmDelete}
-      />}
+      {isDeleteModalOpen && (
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={closeDeleteModal}
+          onConfirm={confirmDelete}
+        />
+      )}
       {isEditModalOpen && (
         <EditContactModal
           isOpen={isEditModalOpen}

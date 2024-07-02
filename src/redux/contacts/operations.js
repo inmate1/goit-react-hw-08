@@ -40,9 +40,7 @@ export const addContact = createAsyncThunk(
 
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async (id, thunkAPI) => {
-    console.log(id);
-    
+  async (id, thunkAPI) => { 
     try {
       const response = await axios.delete(`/contacts/${id}`, {
         headers: { 'Content-Type': 'application/json' },
@@ -59,12 +57,6 @@ export const deleteContact = createAsyncThunk(
 export const updateContact = createAsyncThunk(
   'contacts/updateContact',
   async ({ contactId, updatedContact }, thunkAPI) => {
-     console.log('Arguments passed to updateContact:', {
-       contactId,
-       updatedContact,
-     });
-    console.log({updateContact});
-    
     try {
       const response = await axios.patch( `/contacts/${contactId}`,updatedContact,
         {

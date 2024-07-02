@@ -1,15 +1,11 @@
-import { useDispatch } from "react-redux";
-import LoginForm from "../../components/LoginForm/LoginForm";
-import { logIn } from "../../redux/auth/operations";
+import LoginForm from '../../components/LoginForm/LoginForm';
 
 const LoginPage = () => {
-
- 
   return (
     <>
-      <LoginForm  />
+      <LoginForm />
     </>
   );
-}
+};
 
 export default LoginPage;

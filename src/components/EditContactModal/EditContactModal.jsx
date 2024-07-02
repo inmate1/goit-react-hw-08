@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateContact } from '../../redux/contacts/operations';
 import toast from 'react-hot-toast';
@@ -6,21 +6,12 @@ import css from './EditContactModal.module.css';
 
 const EditContactModal = ({ isOpen, onClose, contactId, initialData }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    number: '',
+    name: initialData ? initialData.name : '',
+    number: initialData ? initialData.number : '',
   });
   const dispatch = useDispatch();
   const nameId = useId();
   const numberId = useId();
-
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        name: initialData.name,
-        number: initialData.number,
-      });
-    }
-  }, [initialData]);
 
   const handleChange = e => {
     const { name, value } = e.target;
