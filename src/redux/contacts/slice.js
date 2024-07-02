@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts, addContact, deleteContact } from './operations';
+import { fetchContacts, addContact, deleteContact, updateContact } from './operations';
 
-import { logOut } from '../auth/operations';
+import { logOut} from '../auth/operations';
 
 const initialState = {
   items: [],
@@ -52,7 +52,21 @@ const changeContacts = createSlice({
       })
       .addCase(logOut.fulfilled, (state, { payload }) => {
         state.items = [];
-      });
+      })
+      .addCase(updateContact.pending, (state, { payload }) => {
+       state.loading = true;
+       state.error = null;
+      })
+      .addCase(updateContact.fulfilled, (state, { payload }) => {
+          state.items = state.items.map(contact =>
+            contact.id === payload.id ? payload : contact
+          );
+        state.loading = false;
+      })
+      .addCase(updateContact.rejected, (state, { payload }) => {
+         state.error = payload;
+         state.loading = false;
+    })
   },
 });
 

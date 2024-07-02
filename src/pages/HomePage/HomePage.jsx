@@ -7,7 +7,9 @@ import css from "./HomePage.module.css"
         <h1 className={css.title}>
           welcome to the contact book app{' '}
           <span role='img' aria-label='Notebook icon'>
+             <span role='img' aria-label='Notebook icon'>
             📔
+          </span>
           </span>
         </h1>
       </div>

@@ -37,7 +37,7 @@ const ContactsPage = () => {
           <Spinner />
         </div>
       )}
-      {error && <p>{error}</p>}
+      {error && <p>{error.message}</p>}
       {contacts.length > 0 && <ContactList />}
     </div>
   );

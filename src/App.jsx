@@ -5,10 +5,12 @@ import Layout from './components/Layout/Layout';
 import { lazy, useEffect } from 'react';
 import PrivateRoute from './pages/PrivateRoute';
 import RestrictedRoute from './pages/RestrictedRoute';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { refreshUser } from './redux/auth/operations';
 import { Toaster } from 'react-hot-toast';
+import { selectIsRefreshing } from './redux/auth/selectors';
+import Spinner from './components/Spinner/Spinner';
 
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const RegistrationPage = lazy(() =>
@@ -17,24 +19,49 @@ const RegistrationPage = lazy(() =>
 const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
 const ContactsPage = lazy(() => import('./pages/ContactsPage/ContactsPage'));
 
-function App() {
+const App = () => {
+  const isRefreshing = useSelector(selectIsRefreshing);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
 
-  return (
+
+  return isRefreshing ? (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}>
+      <Spinner />
+    </div>
+  ) : (
     <>
       <Toaster />
-
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route element={<RestrictedRoute />}>
-            <Route path='/register' element={<RegistrationPage />} />
-            <Route path='/login' element={<LoginPage />} />
-          </Route>
+          <Route
+            path='/register'
+            element={
+              <RestrictedRoute
+                component={<RegistrationPage />}
+                redirectTo={'/contacts'}
+              />
+            }
+          />
+          <Route
+            path='/login'
+            element={
+              <RestrictedRoute
+                component={<LoginPage />}
+                redirectTo={'/contacts'}
+              />
+            }
+          />
           <Route
             path='contacts'
             element={
@@ -50,6 +77,6 @@ function App() {
       </Routes>
     </>
   );
-}
+};
 
 export default App;

@@ -25,10 +25,12 @@ export const addContact = createAsyncThunk(
   'contacts/addContact',
   async (contact, thunkAPI) => {
     try {
-      const response = await axios.post('/contacts', contact, {
+      const response = await axios.post('/contacts', contact
+        , {
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contact),
-      });
+      
+      }
+      );
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -39,6 +41,8 @@ export const addContact = createAsyncThunk(
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async (id, thunkAPI) => {
+    console.log(id);
+    
     try {
       const response = await axios.delete(`/contacts/${id}`, {
         headers: { 'Content-Type': 'application/json' },
@@ -51,3 +55,29 @@ export const deleteContact = createAsyncThunk(
     }
   }
 );
+
+export const updateContact = createAsyncThunk(
+  'contacts/updateContact',
+  async ({ contactId, updatedContact }, thunkAPI) => {
+     console.log('Arguments passed to updateContact:', {
+       contactId,
+       updatedContact,
+     });
+    console.log({updateContact});
+    
+    try {
+      const response = await axios.patch( `/contacts/${contactId}`,updatedContact,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+   
+    }
+  }
+);
+

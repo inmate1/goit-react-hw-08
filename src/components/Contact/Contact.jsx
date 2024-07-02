@@ -8,11 +8,15 @@ import { deleteContact } from '../../redux/contacts/operations';
 import Modal from '../Modal/Modal';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import EditContactModal from '../EditContactModal/EditContactModal';
+
 
 
 
 const Contact = ({ id, name, number }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Состояние для модального окна редактирования
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Состояние для модального окна удаления
+
   const dispatch = useDispatch();
 
   const handleDeleteContact = contactId => {
@@ -21,14 +25,19 @@ const Contact = ({ id, name, number }) => {
       .then(() => toast.success('Contact deleted successfully!'))
       .catch(() => toast.error('Failed to delete contact.'));
   };
+  const openEditModal = () => setIsEditModalOpen(true); 
+  const closeEditModal = () => setIsEditModalOpen(false); 
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openDeleteModal = () => setIsDeleteModalOpen(true); 
+  const closeDeleteModal = () => setIsDeleteModalOpen(false); // Функция для закрытия модального окна удаления
 
+ 
   const confirmDelete = () => {
     handleDeleteContact(id);
-    closeModal();
+    closeDeleteModal();
   };
+
+
   return (
     <li className={css.listItem} id={id}>
       <div>
@@ -46,18 +55,41 @@ const Contact = ({ id, name, number }) => {
           <p>{number}</p>
         </div>
       </div>
-      <button
-        className={css.btnContact}
-        type='button'
-        aria-label='delete'
-        onClick={openModal}>
-        Delete
-      </button>
+      <div className={css.buttonWrapper}>
+        <button
+          className={css.btnContact}
+          type='button'
+          aria-label='edit'
+          onClick={openEditModal}>
+          <span role='img' aria-label='Edit icon'>
+            ✏️
+          </span>
+        </button>
+        <button
+          className={css.btnContact}
+          type='button'
+          aria-label='delete'
+          onClick={openDeleteModal}>
+          {/* Delete */}
+          <span role='img' aria-label='Delete icon'>
+            🗑️
+          </span>
+        </button>
+      </div>
+    {  isDeleteModalOpen &&
       <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
         onConfirm={confirmDelete}
-      />
+      />}
+      {isEditModalOpen && (
+        <EditContactModal
+          isOpen={isEditModalOpen}
+          onClose={closeEditModal}
+          contactId={id}
+          initialData={{ name, number }}
+        />
+      )}
     </li>
   );
 };
