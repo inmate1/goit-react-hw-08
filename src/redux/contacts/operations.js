@@ -10,7 +10,7 @@ export const fetchContacts = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await axios.get('/contacts', {
-        headers: { 'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'application/json' },
       });
 
       return response.data;
@@ -45,7 +45,9 @@ export const deleteContact = createAsyncThunk(
       const response = await axios.delete(`/contacts/${id}`, {
         headers: { 'Content-Type': 'application/json' },
       });
-      return response.data;
+        console.log(response);
+        console.log(id);
+        return id; // Возвращаем только ID удаленного контакта
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
       return thunkAPI.rejectWithValue(errorMessage);
@@ -56,15 +58,17 @@ export const deleteContact = createAsyncThunk(
 
 export const updateContact = createAsyncThunk(
   'contacts/updateContact',
-  async ({ contactId, updatedContact }, thunkAPI) => {
+  async ({ id, updatedContact }, thunkAPI) => {
     try {
-      const response = await axios.patch( `/contacts/${contactId}`,updatedContact,
+      console.log(id);
+      const response = await axios.patch( `/contacts/${id}`, updatedContact,
         {
           headers: {
             'Content-Type': 'application/json',
           },
         }
       );
+      console.log(id);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);

@@ -29,7 +29,7 @@ const EditContactModal = ({ isOpen, onClose, contactId, initialData }) => {
     };
 
     try {
-      await dispatch(updateContact({ contactId, updatedContact })).unwrap();
+      await dispatch(updateContact({ id: contactId, updatedContact })).unwrap();
       toast.success('Contact updated successfully!');
       onClose();
     } catch (error) {

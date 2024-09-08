@@ -1,13 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import ContactForm from '../../components/ContactForm/ContactForm';
 import SearchBox from '../../components/SearchBox/SearchBox';
-import { selectError, selectFilteredContacts, selectIsLoading } from '../../redux/contacts/selectors';
+import {
+  selectError,
+  selectFilteredContacts,
+  selectIsLoading,
+} from '../../redux/contacts/selectors';
 import ContactList from '../../components/ContactList/ContactList';
 import { useEffect } from 'react';
 import { fetchContacts } from '../../redux/contacts/operations';
 import { selectIsLoggedIn } from '../../redux/auth/selectors';
 import Spinner from '../../components/Spinner/Spinner';
-
 
 const ContactsPage = () => {
   const contacts = useSelector(selectFilteredContacts);
@@ -21,6 +24,7 @@ const ContactsPage = () => {
       dispatch(fetchContacts());
     }
   }, [isLoggedIn, dispatch]);
+
   return (
     <div className='wrapper'>
       <h1>Phonebook</h1>
@@ -38,6 +42,7 @@ const ContactsPage = () => {
         </div>
       )}
       {error && <p>{error.message}</p>}
+      {!isLoading && contacts.length === 0 && <p>No contacts found.</p>}
       {contacts.length > 0 && <ContactList />}
     </div>
   );

@@ -15,10 +15,10 @@ const FeedbackSchema = Yup.object().shape({
     .required('Required!!!'),
   number: Yup.string()
     .trim()
-    .matches(
-      /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
-      'Invalid phone number'
-    )
+    // .matches(
+    //   /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+    //   'Invalid phone number'
+    // )
     .min(3, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required!!!'),
@@ -86,7 +86,7 @@ const ContactForm = () => {
                 type='tel'
                 name='number'
                 id={phoneFieldId}
-                placeholder='111-111-1111'
+                // placeholder='111-111-1111'
               />
               {touched.number && errors.number ? (
                 <div className={`${css.message} ${css.error}`}>

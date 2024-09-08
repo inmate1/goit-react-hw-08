@@ -13,7 +13,6 @@ import EditContactModal from '../EditContactModal/EditContactModal';
 const Contact = ({ id, name, number }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   const dispatch = useDispatch();
 
   const handleDeleteContact = contactId => {
