@@ -20,7 +20,8 @@ p {
   background-color: aliceblue;
   border: 2px solid black;
   border-radius: 5px;
-  width: 400px;
+  min-width: 340px;
+  max-width: 420px;
   padding: 16px;
   margin: 0 auto;
   min-height: 200px;
