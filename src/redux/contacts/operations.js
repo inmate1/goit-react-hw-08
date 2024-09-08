@@ -69,9 +69,11 @@ export const updateContact = createAsyncThunk(
         }
       );
       console.log(id);
-      return response.data;
+      return response.data.data; // Возвращаем только обновленные данные контакта
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message);
+      const errorMessage = error.response?.data?.message || error.message;
+      return thunkAPI.rejectWithValue(errorMessage);
+        // return thunkAPI.rejectWithValue(error.message);
    
     }
   }

@@ -59,8 +59,9 @@ const changeContacts = createSlice({
       })
       .addCase(updateContact.fulfilled, (state, { payload }) => {
           state.items = state.items.map(contact =>
-            contact._id === payload.id ? payload : contact
+            contact._id === payload._id ? payload : contact
           );
+          console.log(payload);
         state.loading = false;
       })
       .addCase(updateContact.rejected, (state, { payload }) => {
