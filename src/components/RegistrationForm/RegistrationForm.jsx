@@ -2,8 +2,9 @@ import { Field, Form, Formik } from 'formik';
 import { useId } from 'react';
 import css from './RegistrationForm.module.css';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../redux/auth/operations';
+import { selectIsLoading } from '../../redux/auth/selectors';
 
 const FeedbackSchema = Yup.object().shape({
   name: Yup.string()
@@ -29,6 +30,7 @@ const RegistrationForm = () => {
   const passwordId = useId();
   const confirmPasswordId = useId();
   const dispatch = useDispatch();
+  const isLoading = useSelector(selectIsLoading);
 
   const handleSubmit = (values, actions) => {
     const { name, email, password } = values;
@@ -135,8 +137,13 @@ const RegistrationForm = () => {
                 )
               )}
             </div>
-            <button className={css.btn} type='submit' disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit'}
+            <button
+              className={css.btn}
+              type='submit'
+              disabled={isSubmitting || isLoading} 
+            >
+              {isSubmitting || isLoading ? 'Submitting...' : 'Submit'}{' '}
+            
             </button>
           </Form>
         )}

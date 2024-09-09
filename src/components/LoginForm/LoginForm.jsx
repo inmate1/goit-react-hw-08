@@ -1,14 +1,15 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useId } from 'react';
 import css from './LoginForm.module.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logIn } from '../../redux/auth/operations';
+import { selectIsLoading } from '../../redux/auth/selectors';
 
 const LoginForm = () => {
   const emailId = useId();
   const passwordId = useId();
   const dispatch = useDispatch();
-
+  const isLoading = useSelector(selectIsLoading); 
   const handleSubmit = (values, actions) => {
     dispatch(logIn(values));
     actions.setSubmitting(false);
@@ -68,7 +69,8 @@ const LoginForm = () => {
               />
             </div>
             <button className={css.btn} type='submit' disabled={isSubmitting}>
-              Log In
+              {/* Log In */}
+              {isLoading ? 'Loading...' : 'Log In'} {/* <-- Изменение текста на кнопке */}
             </button>
           </Form>
         )}

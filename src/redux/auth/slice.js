@@ -9,6 +9,7 @@ const initialState = {
   token: null,
   isLoggedIn: false,
   isRefreshing: false,
+  isLoading: false,  //  состояние загрузки
 };
 
 const authSlice = createSlice({
@@ -16,21 +17,31 @@ const authSlice = createSlice({
   initialState,
   extraReducers: builder => {
     builder
+    .addCase(register.pending, (state) => {
+      state.isLoading = true; // При старте запроса
+    })
       .addCase(register.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isLoggedIn = true;
+        state.isLoading = false; // <Когда запрос завершился
       })
       .addCase(register.rejected, (state, action) => {
         state.error = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(logIn.pending, (state) => {
+        state.isLoading = true;  // <-- При старте логина
       })
       .addCase(logIn.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isLoggedIn = true;
+        state.isLoading = false;
       })
       .addCase(logIn.rejected, (state, action) => {
         state.error = action.payload;
+        state.isLoading = false;
       })
 
       .addCase(logOut.fulfilled, (state, action) => {
